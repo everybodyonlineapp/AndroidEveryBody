@@ -14,14 +14,15 @@ public class SQLiteHelperClass extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		
+
 		db.execSQL(ProfileDBHelper.SCRIPT_CREATE_TABLE);//
 		db.execSQL(CityDBHelper.SCRIPT_CREATE_TABLE);
-		
+		db.execSQL(ServiceMainCategoryDBHelper.SCRIPT_CREATE_TABLE);
+
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		//db.execSQL(CouponCodeDBHelper.SCRIPT_CREATE_TABLE);
+		// db.execSQL(CouponCodeDBHelper.SCRIPT_CREATE_TABLE);
 	}
 }

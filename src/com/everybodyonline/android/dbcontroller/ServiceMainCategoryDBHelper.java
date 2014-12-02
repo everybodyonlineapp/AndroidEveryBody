@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.everybodyonline.android.model.City;
 import com.everybodyonline.android.model.Profile;
+import com.everybodyonline.android.model.ServiceMainCategory;
 import com.everybodyonline.android.util.CityConstants;
 import com.everybodyonline.android.util.Constants;
 import com.everybodyonline.android.util.DateAndTime;
@@ -19,14 +20,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
-public class CityDBHelper extends SQLiteHelperClass {
+public class ServiceMainCategoryDBHelper extends SQLiteHelperClass {
 
-	private static final String TAG = CityDBHelper.class.getName();
+	private static final String TAG = ServiceMainCategoryDBHelper.class.getName();
 	public static final String DB_NAME = Constants.DB_NAME;
 	public static final int DATABASE_VERSION = 2;
-	public static final String TABLE_NAME = "City";
+	public static final String TABLE_NAME = "ServiceMainCategory";
 	public static final String ID = "_id";
-	public static final String CITY_ID = "city_id";
+	public static final String CATEGORY_ID = "city_id";
 	public static final String NAME = "name";
 	public static final String UPDATED_AT = "updatedAt";
 	public static final String STATUS = "status";
@@ -57,7 +58,7 @@ public class CityDBHelper extends SQLiteHelperClass {
 			+ " TEXT PRIMARY KEY,"
 			+ NAME
 			+ " TEXT,"
-			+ CITY_ID
+			+ CATEGORY_ID
 			+ " TEXT,"
 			+ UPDATED_AT
 			+ " INTEGER,"
@@ -65,7 +66,7 @@ public class CityDBHelper extends SQLiteHelperClass {
 			+ " INTEGER"
 			+ ")";
 
-	public CityDBHelper(Context context) {
+	public ServiceMainCategoryDBHelper(Context context) {
 		super(context, DB_NAME, null, Constants.DATABASE_VERSION_2);
 	}
 
@@ -83,7 +84,7 @@ public class CityDBHelper extends SQLiteHelperClass {
 		// deleteProfile(profile);
 
 		ContentValues values = new ContentValues();
-		values.put(CITY_ID, city.getObjectId());
+		values.put(CATEGORY_ID, city.getObjectId());
 		values.put(NAME, city.getString(CityConstants.Name));
 		values.put(STATUS, (city.getBoolean(CityConstants.Status))?1:0);
 		
@@ -96,7 +97,7 @@ public class CityDBHelper extends SQLiteHelperClass {
 		if (!ifcityexist)
 			rowId = database.insert(TABLE_NAME, null, values);
 		else {
-			String selection = CITY_ID + "='" + city.getObjectId() + "'";
+			String selection = CATEGORY_ID + "='" + city.getObjectId() + "'";
 			database.update(TABLE_NAME, values, selection, null);
 		}
 		database.close();
@@ -105,7 +106,7 @@ public class CityDBHelper extends SQLiteHelperClass {
 
 	public long deleteProfile(ParseObject city) {
 		SQLiteDatabase database = getWritableDatabase();
-		String selection = CITY_ID + "='" + city.getObjectId() + "'";
+		String selection = CATEGORY_ID + "='" + city.getObjectId() + "'";
 		long rowId = 0;
 		rowId = database.delete(TABLE_NAME, selection, null);
 		database.close();
@@ -141,37 +142,37 @@ public class CityDBHelper extends SQLiteHelperClass {
 		return deletedRowCount;
 	}
 
-	public City getCIty(String cityId) {
+	public ServiceMainCategory getCategory(String cityId) {
 
-		City city = null;
-		String selection = CITY_ID + "='" + cityId + "'";
+		ServiceMainCategory serviceMainCategory = null;
+		String selection = CATEGORY_ID + "='" + cityId + "'";
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, null, selection, null, null,
 				null, null);
 		if (cursor != null && cursor.moveToFirst()) {
-			city = new City();
+			serviceMainCategory = new ServiceMainCategory();
 
-			city.setUpdatedAt(cursor.getInt(cursor
+			serviceMainCategory.setUpdatedAt(cursor.getInt(cursor
 					.getColumnIndexOrThrow(UPDATED_AT)));
 
-			city.setCityid(cursor.getString(cursor
-					.getColumnIndexOrThrow(CITY_ID)));
+			serviceMainCategory.setCategoryId(cursor.getString(cursor
+					.getColumnIndexOrThrow(CATEGORY_ID)));
 
-			city.setName(cursor.getString(cursor.getColumnIndexOrThrow(NAME)));
+			serviceMainCategory.setName(cursor.getString(cursor.getColumnIndexOrThrow(NAME)));
 
-			city.setStatus(cursor.getInt(cursor
+			serviceMainCategory.setStatus(cursor.getInt(cursor
 					.getColumnIndexOrThrow(STATUS)));
 
 			cursor.close();
 		}
 		database.close();
-		return city;
+		return serviceMainCategory;
 	}
 
 	public boolean checkCityExist(String cityId) {
 
 		boolean ifexist = false;
-		String selection = CITY_ID + "='" + cityId + "'";
+		String selection = CATEGORY_ID + "='" + cityId + "'";
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, null, selection, null, null,
 				null, null);
@@ -191,10 +192,10 @@ public class CityDBHelper extends SQLiteHelperClass {
 	 * return database.delete(TABLE_NAME, selection, null); }
 	 */
 
-	public ArrayList<City> getCities() {
+	public ArrayList<ServiceMainCategory> getCategories() {
 
-		ArrayList<City> citylist = new ArrayList<City>();
-		City city;
+		ArrayList<ServiceMainCategory> mainCaregoryList = new ArrayList<ServiceMainCategory>();
+		ServiceMainCategory serviceMainCategory;
 		// String selection = CATEGORY_ID + "='" + profileId + "'";
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, null, null, null, null,
@@ -203,30 +204,30 @@ public class CityDBHelper extends SQLiteHelperClass {
 
 			for (int i = 0; i < cursor.getCount(); i++) {
 				cursor.moveToPosition(i);
-				city = new City();
+				serviceMainCategory = new ServiceMainCategory();
 
-				city.setCityid(cursor.getString(cursor
-						.getColumnIndexOrThrow(CITY_ID)));
+				serviceMainCategory.setCategoryId(cursor.getString(cursor
+						.getColumnIndexOrThrow(CATEGORY_ID)));
 
-				city.setName(cursor.getString(cursor
+				serviceMainCategory.setName(cursor.getString(cursor
 						.getColumnIndexOrThrow(NAME)));
 
-				city.setUpdatedAt(cursor.getInt(cursor
+				serviceMainCategory.setUpdatedAt(cursor.getInt(cursor
 						.getColumnIndexOrThrow(UPDATED_AT)));
-				city.setStatus(cursor.getInt(cursor
+				serviceMainCategory.setStatus(cursor.getInt(cursor
 						.getColumnIndexOrThrow(STATUS)));
-				citylist.add(city);
+				mainCaregoryList.add(serviceMainCategory);
 			}
 
 			cursor.close();
 		}
 		database.close();
-		return citylist;
+		return mainCaregoryList;
 	}
 
 	public long deleteProfileByProfileId(String profileId) {
 		SQLiteDatabase database = getWritableDatabase();
-		String selection = CITY_ID + "='" + profileId + "'";
+		String selection = CATEGORY_ID + "='" + profileId + "'";
 		long rowId = 0;
 		rowId = database.delete(TABLE_NAME, selection, null);
 		database.close();

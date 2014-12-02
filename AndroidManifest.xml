@@ -7,11 +7,12 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="18" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
-        android:name=".activity.EveryBodyOnline"
+        android:name="com.everybodyonline.android.activity.EveryBodyOnline"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -31,7 +32,12 @@
         </activity>
         <activity
             android:name="com.everybodyonline.android.activity.SelectTypeOfProfile"
-             android:label="@string/title_activity_edit_profile" >
+            android:label="@string/title_activity_edit_profile" >
+        </activity>
+        <activity
+            android:name="com.everybodyonline.android.activity.ServiceTypeSelector"
+            android:theme="@android:style/Theme.Dialog"
+            android:label="@string/title_activity_service_type_selector" >
         </activity>
     </application>
 

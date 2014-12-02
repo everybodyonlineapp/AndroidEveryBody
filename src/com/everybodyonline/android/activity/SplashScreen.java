@@ -17,6 +17,7 @@ import android.view.Menu;
 import com.everybodyonline.android.R;
 import com.everybodyonline.android.dbcontroller.CityDBHelper;
 import com.everybodyonline.android.dbcontroller.ProfileDBHelper;
+import com.everybodyonline.android.dbcontroller.ServiceMainCategoryDBHelper;
 import com.everybodyonline.android.model.Profile;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -31,50 +32,89 @@ public class SplashScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splashscreen);
 		context = this;
+		updateCategory();
 		updateCityTable();
-		// 
+		//
 	}
 
-	private void updateCityTable() {
+	private void updateCategory() {
 		// TODO Auto-generated method stub
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
-		
-		final CityDBHelper cityDb = new CityDBHelper(context);
-		Date maxDate=cityDb.getMaxUpdatedTime();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("ServiceCategory");
+
+		final ServiceMainCategoryDBHelper serviceMainCategoryDBHelper = new ServiceMainCategoryDBHelper(
+				context);
+		Date maxDate = serviceMainCategoryDBHelper.getMaxUpdatedTime();
 		query.whereGreaterThan("updatedAt", maxDate);
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
-					if (objects.size()>0) {
-						
-					
-					// BetDB betdb = new BetDB(context.getApplicationContext());
-					ParseObject cityObject;
-					ListIterator<ParseObject> listItem = objects.listIterator();
-                   
-					while (listItem.hasNext()) {
-						cityObject = listItem.next();
-						cityDb.insertOrUpdate(cityObject);
-						cityObject.getUpdatedAt();
-						// betdb.addUserPoint(betObject);
-						String cityName = cityObject.getString("Name");
-						Log.i("Tag", cityName);
-					}
+					if (objects.size() > 0) {
+
+						// BetDB betdb = new
+						// BetDB(context.getApplicationContext());
+						ParseObject parseobject;
+						ListIterator<ParseObject> listItem = objects
+								.listIterator();
+
+						while (listItem.hasNext()) {
+							parseobject = listItem.next();
+							serviceMainCategoryDBHelper
+									.insertOrUpdate(parseobject);
+							// betdb.addUserPoint(betObject);
+							String cityName = parseobject.getString("Name");
+							Log.i("Tag", cityName);
+						}
 					}
 
 				} else {
 					Log.i("Error", e.getMessage());
 				}
+
 				
+			}
+
+		});
+	}
+
+	private void updateCityTable() {
+		// TODO Auto-generated method stub
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
+
+		final CityDBHelper cityDb = new CityDBHelper(context);
+		Date maxDate = cityDb.getMaxUpdatedTime();
+		query.whereGreaterThan("updatedAt", maxDate);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					if (objects.size() > 0) {
+
+						// BetDB betdb = new
+						// BetDB(context.getApplicationContext());
+						ParseObject cityObject;
+						ListIterator<ParseObject> listItem = objects
+								.listIterator();
+
+						while (listItem.hasNext()) {
+							cityObject = listItem.next();
+							cityDb.insertOrUpdate(cityObject);
+							cityObject.getUpdatedAt();
+							// betdb.addUserPoint(betObject);
+							String cityName = cityObject.getString("Name");
+							Log.i("Tag", cityName);
+						}
+					}
+
+				} else {
+					Log.i("Error", e.getMessage());
+				}
+
 				openNextScreen();
 			}
 
 		});
 	}
-	
-	//Try
-	
-	
+
+	// Try
 
 	private void openNextScreen() {
 		// TODO Auto-generated method stub

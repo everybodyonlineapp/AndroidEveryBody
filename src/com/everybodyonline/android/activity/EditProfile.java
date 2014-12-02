@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -51,7 +52,7 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 	ArrayList<City> citylist;
 	ArrayList<Area> arealist;
 	Context context;
-	static String areaId,ProfileType,cityId;
+	static String areaId, ProfileType, cityId;
 	Button save, cancel;
 
 	@Override
@@ -70,14 +71,15 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 		radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
 		save = (Button) findViewById(R.id.btnSave);
 		cancel = (Button) findViewById(R.id.btnCancel);
+		etServicetype.setOnClickListener(this);
 
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
 		if (radioGroup.getCheckedRadioButtonId() == R.id.Consumer) {
 			toogleFields(true);
-			
+
 		} else {
-		
+
 			toogleFields(false);
 		}
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -117,7 +119,7 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 
 	void toogleFields(boolean isConsumer) {
 		if (isConsumer) {
-			ProfileType=Constants.ConsumerType;
+			ProfileType = Constants.ConsumerType;
 			etName.setVisibility(View.VISIBLE);
 			etShopName.setVisibility(View.GONE);
 			etPhone.setVisibility(View.VISIBLE);
@@ -129,7 +131,7 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 		}
 
 		else {
-			ProfileType=Constants.ProviderType;
+			ProfileType = Constants.ProviderType;
 			etName.setVisibility(View.VISIBLE);
 			etShopName.setVisibility(View.VISIBLE);
 			etPhone.setVisibility(View.VISIBLE);
@@ -180,9 +182,9 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-	
-		//String cityId = 
-		cityId=citylist.get(arg2).Cityid;
+
+		// String cityId =
+		cityId = citylist.get(arg2).Cityid;
 		final ProgressDialog pd = new ProgressDialog(context);
 		pd.setCancelable(false);
 		pd.show();
@@ -228,11 +230,43 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 			finish();
 			break;
 		case R.id.btnSave:
+			if (ProfileType.equalsIgnoreCase(Constants.ConsumerType)) {
+				if (etName.getText().toString().length() < 1) {
+					showToast("Name Can not be Empty");
+				} else if (etPhone.getText().toString().length() < 10) {
+					showToast("Please Enter Valid Phone Number");
+				} else if (etCity.getText().toString().length() < 1) {
+					showToast("City Can not be Empty");
+				} else if (etAdress.getText().toString().length() < 1) {
+					showToast("Address Can not be Empty");
+				}
+			} else {
+				if (etName.getText().toString().length() < 1) {
+					showToast("Name Can not be Empty");
+				} else if (etPhone.getText().toString().length() < 10) {
+					showToast("Please Enter Valid Phone Number");
+				} else if (etCity.getText().toString().length() < 1) {
+					showToast("City Can not be Empty");
+				} else if (etAdress.getText().toString().length() < 1) {
+					showToast("Address Can not be Empty");
+				} else if (etServicetype.getText().toString().length() < 1) {
+					showToast("Service Type Can not be Empty");
+				} else if (etServicearea.getText().toString().length() < 1) {
+					showToast("Service Areas Can not be Empty");
+				}
+			}
 			checkProfile();
 			break;
+		case R.id.ServiceType:
+			startActivity(new Intent(context,ServiceTypeSelector.class));
 		default:
 			break;
 		}
+	}
+
+	private void showToast(String Showtext) {
+		// TODO Auto-generated method stub
+		Toast.makeText(context, Showtext, Toast.LENGTH_SHORT).show();
 	}
 
 	private void checkProfile() {
@@ -257,19 +291,16 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 						while (listItem.hasNext()) {
 							cityObject = listItem.next();
 							String type = cityObject.getString("ProfileType");
-							if(type.equalsIgnoreCase(ProfileType))
-							{
-								Toast.makeText(context, "Profile Already Exist", Toast.LENGTH_SHORT).show();
-							}
-							else
-							{
+							if (type.equalsIgnoreCase(ProfileType)) {
+								Toast.makeText(context,
+										"Profile Already Exist",
+										Toast.LENGTH_SHORT).show();
+							} else {
 								saveProfile();
 							}
 
 						}
-					}
-					else
-					{
+					} else {
 						saveProfile();
 					}
 
@@ -286,6 +317,7 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 		// TODO Auto-generated method stub
 		final ProgressDialog pd = new ProgressDialog(context);
 		pd.setCancelable(false);
+
 		pd.show();
 		ParseObject parseobject = new ParseObject("Profiles");
 
@@ -296,17 +328,17 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 		parseobject.put("City", cityId);
 		parseobject.put("Area", areaId);
 		parseobject.put("Adress", etAdress.getText().toString());
-		//parseobject.put("AboutUs", eta.getText().toString());
+		// parseobject.put("AboutUs", eta.getText().toString());
 		parseobject.put("Status", true);
 		parseobject.saveInBackground(new SaveCallback() {
-			
+
 			@Override
 			public void done(ParseException arg0) {
 				// TODO Auto-generated method stub
 				pd.dismiss();
 			}
 		});
-		
+
 	}
 
 }

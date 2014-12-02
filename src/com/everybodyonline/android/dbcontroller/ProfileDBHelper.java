@@ -106,7 +106,7 @@ public class ProfileDBHelper extends SQLiteHelperClass {
 
 	/*
 	 * boolean isProfileExist (SQLiteDatabase database,String profileId) {
-	 * String selection = CITY_ID + "='" + profileId + "'"; Cursor cursor =
+	 * String selection = CATEGORY_ID + "='" + profileId + "'"; Cursor cursor =
 	 * database.query(TABLE_NAME, null, selection, null, null, null, null);
 	 * if(cursor.getCount()>0) { cursor.close(); return true; }
 	 * 
@@ -167,7 +167,7 @@ public class ProfileDBHelper extends SQLiteHelperClass {
 
 		ArrayList<Profile> profilelist = new ArrayList<Profile>();
 		Profile profile;
-		// String selection = CITY_ID + "='" + profileId + "'";
+		// String selection = CATEGORY_ID + "='" + profileId + "'";
 		SQLiteDatabase database = getReadableDatabase();
 		Cursor cursor = database.query(TABLE_NAME, null, null, null, null,
 				null, null);
