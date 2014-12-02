@@ -21,9 +21,9 @@
             android:background="@drawable/apptheme_btn_toggle_holo_light"
             android:button="@null"
             android:checked="true"
-            android:textColor="#FFFFFF"
             android:gravity="center"
-            android:text="Consumer" />
+            android:text="@string/consumer"
+            android:textColor="#FFFFFF" />
 
         <RadioButton
             android:id="@+id/Service_Provider"
@@ -33,9 +33,9 @@
             android:background="@drawable/apptheme_btn_toggle_holo_light"
             android:button="@null"
             android:checked="false"
-               android:textColor="#FFFFFF"
             android:gravity="center"
-            android:text="Consumer" />
+            android:text="@string/service_Provide"
+            android:textColor="#FFFFFF" />
     </RadioGroup>
 
     <EditText
@@ -58,16 +58,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ShopName"
+        android:inputType="phone"
         android:hint="@string/phone_number" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/City"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/PhoneNumber"
         android:hint="@string/city" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/Area"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -75,10 +76,17 @@
         android:hint="@string/area" />
 
     <EditText
-        android:id="@+id/ServiceType"
+        android:id="@+id/Adress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/Area"
+        android:hint="@string/adress" />
+
+    <EditText
+        android:id="@+id/ServiceType"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Adress"
         android:hint="@string/service_type" />
 
     <EditText
@@ -99,15 +107,19 @@
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="3dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/apptheme_btn_toggle_on_pressed_holo_light"
+            android:padding="6dp"
             android:text="@string/save" />
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="3dp"
             android:layout_toRightOf="@id/btnSave"
-            android:paddingLeft="3dp"
+            android:background="@drawable/apptheme_btn_toggle_on_pressed_holo_light"
+            android:padding="6dp"
             android:text="@string/cancel" />
     </RelativeLayout>
 

@@ -1,20 +1,25 @@
 package com.everybodyonline.android.dbcontroller;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import java.util.List;
 
 import com.everybodyonline.android.model.City;
 import com.everybodyonline.android.model.Profile;
+import com.everybodyonline.android.util.CityConstants;
 import com.everybodyonline.android.util.Constants;
+import com.everybodyonline.android.util.DateAndTime;
+import com.parse.ParseObject;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
-public class CityDBHelper extends SQLiteOpenHelper {
+public class CityDBHelper extends SQLiteHelperClass {
 
 	private static final String TAG = CityDBHelper.class.getName();
 	public static final String DB_NAME = Constants.DB_NAME;
@@ -36,18 +41,35 @@ public class CityDBHelper extends SQLiteOpenHelper {
 	 * "badge_rider"; public static final String BADGE_SHARER = "badge_sharer";
 	 * public static final String KEY_SEARCH = "Searchfield";
 	 */
-	public static final String SCRIPT_CREATE_TABLE = "CREATE VIRTUAL TABLE "
+	/*
+	 * public static final String SCRIPT_CREATE_TABLE = "CREATE VIRTUAL TABLE "
+	 * 
+	 * + TABLE_NAME + " USING fts3" + "(" + ID + " TEXT PRIMARY KEY, " + NAME +
+	 * " TEXT, " + CITY_ID + " TEXT, " + UPDATED_AT + " INTEGER, " + STATUS +
+	 * " TEXT" + " UNIQUE (" + NAME + "," + CITY_ID +
+	 * ") ON CONFLICT REPLACE );";
+	 */
 
-	+ TABLE_NAME + " USING fts3" + "(" + ID + " TEXT PRIMARY KEY, " + NAME
-			+ " TEXT, " + CITY_ID + " TEXT, " + UPDATED_AT + " TEXT, " + STATUS
-			+ " TEXT" + " UNIQUE (" + NAME + "," + CITY_ID
-			+ ") ON CONFLICT REPLACE );";
+	public static final String SCRIPT_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
+			+ TABLE_NAME
+			+ " ("
+			+ ID
+			+ " TEXT PRIMARY KEY,"
+			+ NAME
+			+ " TEXT,"
+			+ CITY_ID
+			+ " TEXT,"
+			+ UPDATED_AT
+			+ " INTEGER,"
+			+ STATUS
+			+ " INTEGER"
+			+ ")";
 
 	public CityDBHelper(Context context) {
 		super(context, DB_NAME, null, Constants.DATABASE_VERSION_2);
 	}
 
-	@Override
+	/*@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(SCRIPT_CREATE_TABLE);
 	}
@@ -55,38 +77,53 @@ public class CityDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-	}
+	}*/
 
-	public long insertOrUpdate(City city) {
+	public long insertOrUpdate(ParseObject city) {
 		// deleteProfile(profile);
 
 		ContentValues values = new ContentValues();
-		values.put(CITY_ID, city.getCityid());
-		values.put(NAME, city.getName());
-		values.put(STATUS, city.getStatus());
-		values.put(UPDATED_AT, city.getUpdatedAt());
+		values.put(CITY_ID, city.getObjectId());
+		values.put(NAME, city.getString(CityConstants.Name));
+		values.put(STATUS, (city.getBoolean(CityConstants.Status))?1:0);
+		
+		values.put(UPDATED_AT, DateAndTime.getLongFromDate(city.getUpdatedAt()));
 
 		long rowId = 0;
-		boolean ifcityexist = checkCityExist(city.getCityid());
+		boolean ifcityexist = checkCityExist(city.getObjectId());
 
 		SQLiteDatabase database = getWritableDatabase();
 		if (!ifcityexist)
 			rowId = database.insert(TABLE_NAME, null, values);
 		else {
-			String selection = CITY_ID + "='" + city.getCityid() + "'";
+			String selection = CITY_ID + "='" + city.getObjectId() + "'";
 			database.update(TABLE_NAME, values, selection, null);
 		}
 		database.close();
 		return rowId;
 	}
 
-	public long deleteProfile(Profile profile) {
+	public long deleteProfile(ParseObject city) {
 		SQLiteDatabase database = getWritableDatabase();
-		String selection = CITY_ID + "='" + profile.getProfile_id() + "'";
+		String selection = CITY_ID + "='" + city.getObjectId() + "'";
 		long rowId = 0;
 		rowId = database.delete(TABLE_NAME, selection, null);
 		database.close();
 		return rowId;
+	}
+
+	public Date getMaxUpdatedTime() {
+		// deleteProfile(profile);
+
+		SQLiteDatabase database = getReadableDatabase();
+		long maxData = 0;
+		String selection = "SELECT MAX (" + UPDATED_AT + ") FROM " + TABLE_NAME;
+		final SQLiteStatement stmt = database.compileStatement(selection);
+		maxData = (long) stmt.simpleQueryForLong();
+		database.close();
+		Date returndate = DateAndTime.getDateFromLong(maxData);
+		// Log.d(TAG, "getMaxColumnData maxData value : " + maxData);
+		return returndate;
 	}
 
 	/*
@@ -114,7 +151,7 @@ public class CityDBHelper extends SQLiteOpenHelper {
 		if (cursor != null && cursor.moveToFirst()) {
 			city = new City();
 
-			city.setUpdatedAt(cursor.getString(cursor
+			city.setUpdatedAt(cursor.getInt(cursor
 					.getColumnIndexOrThrow(UPDATED_AT)));
 
 			city.setCityid(cursor.getString(cursor
@@ -122,7 +159,7 @@ public class CityDBHelper extends SQLiteOpenHelper {
 
 			city.setName(cursor.getString(cursor.getColumnIndexOrThrow(NAME)));
 
-			city.setStatus(cursor.getString(cursor
+			city.setStatus(cursor.getInt(cursor
 					.getColumnIndexOrThrow(STATUS)));
 
 			cursor.close();
@@ -154,7 +191,7 @@ public class CityDBHelper extends SQLiteOpenHelper {
 	 * return database.delete(TABLE_NAME, selection, null); }
 	 */
 
-	public List<City> getCities() {
+	public ArrayList<City> getCities() {
 
 		ArrayList<City> citylist = new ArrayList<City>();
 		City city;
@@ -174,9 +211,9 @@ public class CityDBHelper extends SQLiteOpenHelper {
 				city.setName(cursor.getString(cursor
 						.getColumnIndexOrThrow(NAME)));
 
-				city.setUpdatedAt(cursor.getString(cursor
+				city.setUpdatedAt(cursor.getInt(cursor
 						.getColumnIndexOrThrow(UPDATED_AT)));
-				city.setStatus(cursor.getString(cursor
+				city.setStatus(cursor.getInt(cursor
 						.getColumnIndexOrThrow(STATUS)));
 				citylist.add(city);
 			}

@@ -16,6 +16,7 @@ public class SQLiteHelperClass extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL(ProfileDBHelper.SCRIPT_CREATE_TABLE);//
+		db.execSQL(CityDBHelper.SCRIPT_CREATE_TABLE);
 		
 	}
 

@@ -1,10 +1,12 @@
 package com.everybodyonline.android.model;
 
+import android.R.bool;
+
 public class City {
-	private String Cityid;
-	private String Name;
-	private String updatedAt;
-	private String Status;
+	public String Cityid;
+	public String Name;
+	public long updatedAt;
+	public int Status;
 
 	public String getCityid() {
 		return Cityid;
@@ -22,19 +24,25 @@ public class City {
 		Name = name;
 	}
 
-	public String getUpdatedAt() {
+	public long getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(String updatedAt) {
+	public void setUpdatedAt(long updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return Status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		Status = status;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getName();
 	}
 }

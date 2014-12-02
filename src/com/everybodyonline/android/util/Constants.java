@@ -9,5 +9,7 @@ public class Constants {
 	public static final  String CreateProfile = "CreateProfile" ;
 	
 	public static final  String CreateProfileType = "CreateProfileType" ;
+	public static final  String ConsumerType = "Consumer" ;
+	public static final  String ProviderType = "Provider" ;
 
 }

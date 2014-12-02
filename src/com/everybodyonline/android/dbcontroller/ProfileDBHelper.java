@@ -13,7 +13,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class ProfileDBHelper extends SQLiteOpenHelper {
+public class ProfileDBHelper extends SQLiteHelperClass {
 
 	private static final String TAG = ProfileDBHelper.class.getName();
 	public static final String DB_NAME = Constants.DB_NAME;
@@ -55,7 +55,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper {
 		super(context, DB_NAME, null, Constants.DATABASE_VERSION_2);
 	}
 
-	@Override
+	/*@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(SCRIPT_CREATE_TABLE);
 	}
@@ -63,7 +63,7 @@ public class ProfileDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-	}
+	}*/
 
 	public long insertOrUpdate(Profile profile) {
 		// deleteProfile(profile);

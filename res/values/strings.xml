@@ -8,6 +8,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="city">City</string>
     <string name="area">Area</string>
+     <string name="adress">Adress</string>
     <string name="service_type">Service Type</string>
     <string name="service_sub_type">Service Sub Type</string>
     <string name="service_area">Service Area</string>

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.everybodyonline.android.R;
+import com.everybodyonline.android.dbcontroller.CityDBHelper;
 import com.everybodyonline.android.dbcontroller.ProfileDBHelper;
 import com.everybodyonline.android.model.Profile;
 import com.parse.FindCallback;
@@ -31,41 +32,49 @@ public class SplashScreen extends Activity {
 		setContentView(R.layout.activity_splashscreen);
 		context = this;
 		updateCityTable();
-		// openNextScreen();
+		// 
 	}
 
 	private void updateCityTable() {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("City");
-		Calendar cal = Calendar.getInstance();
-		cal.set(2013, 11, 7, 15, 23,433);
-		Date d = cal.getTime();
-		SimpleDateFormat df = new SimpleDateFormat("MMM,dd,yyyy,hh:mm");
-		Log.i("Log", df.format(d));
-
-		query.whereGreaterThanOrEqualTo("updatedAt", d);
+		
+		final CityDBHelper cityDb = new CityDBHelper(context);
+		Date maxDate=cityDb.getMaxUpdatedTime();
+		query.whereGreaterThan("updatedAt", maxDate);
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
+					if (objects.size()>0) {
+						
+					
 					// BetDB betdb = new BetDB(context.getApplicationContext());
-					ParseObject betObject;
+					ParseObject cityObject;
 					ListIterator<ParseObject> listItem = objects.listIterator();
-
+                   
 					while (listItem.hasNext()) {
-						betObject = listItem.next();
-						betObject.getUpdatedAt();
+						cityObject = listItem.next();
+						cityDb.insertOrUpdate(cityObject);
+						cityObject.getUpdatedAt();
 						// betdb.addUserPoint(betObject);
-						String cityName = betObject.getString("Name");
+						String cityName = cityObject.getString("Name");
 						Log.i("Tag", cityName);
+					}
 					}
 
 				} else {
 					Log.i("Error", e.getMessage());
 				}
+				
+				openNextScreen();
 			}
 
 		});
 	}
+	
+	//Try
+	
+	
 
 	private void openNextScreen() {
 		// TODO Auto-generated method stub
