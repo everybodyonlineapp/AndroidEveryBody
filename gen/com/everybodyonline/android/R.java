@@ -32,22 +32,20 @@ public final class R {
         public static final int Adress=0x7f080008;
         public static final int Area=0x7f080007;
         public static final int City=0x7f080006;
-        public static final int Consumer=0x7f080001;
-        public static final int Name=0x7f080003;
+        public static final int ExistingUser=0x7f08000c;
+        public static final int Name=0x7f080004;
+        public static final int NewUser=0x7f08000b;
         public static final int PhoneNumber=0x7f080005;
-        public static final int SelectMainCategory=0x7f080010;
-        public static final int SelectSubCategory=0x7f080011;
-        public static final int Select_Type_Title=0x7f08000e;
-        public static final int ServiceArea=0x7f08000a;
-        public static final int ServiceType=0x7f080009;
-        public static final int Service_Provider=0x7f080002;
-        public static final int ShopName=0x7f080004;
-        public static final int action_settings=0x7f080012;
-        public static final int btnCancel=0x7f08000d;
-        public static final int btnLayout=0x7f08000b;
-        public static final int btnNext=0x7f08000f;
-        public static final int btnSave=0x7f08000c;
-        public static final int radiogroup=0x7f080000;
+        public static final int SelectMainCategory=0x7f08000e;
+        public static final int SelectSubCategory=0x7f08000f;
+        public static final int Select_Type_Title=0x7f080009;
+        public static final int action_settings=0x7f080010;
+        public static final int btnCancel=0x7f080002;
+        public static final int btnEdit=0x7f080003;
+        public static final int btnLayout=0x7f080000;
+        public static final int btnNext=0x7f08000d;
+        public static final int btnSave=0x7f080001;
+        public static final int radiogroup=0x7f08000a;
     }
     public static final class layout {
         public static final int activity_edit_profile=0x7f030000;
@@ -62,26 +60,29 @@ public final class R {
         public static final int service_type_selector=0x7f070003;
     }
     public static final class string {
+        public static final int Existinguser=0x7f050016;
         public static final int action_settings=0x7f050001;
         public static final int adress=0x7f050007;
         public static final int app_name=0x7f050000;
         public static final int area=0x7f050006;
         public static final int cancel=0x7f05000c;
         public static final int city=0x7f050005;
-        public static final int consumer=0x7f05000f;
+        public static final int consumer=0x7f050010;
+        public static final int edit=0x7f05000d;
         public static final int hello_world=0x7f050002;
-        public static final int next=0x7f05000e;
+        public static final int newuser=0x7f050015;
+        public static final int next=0x7f05000f;
         public static final int phone_number=0x7f050004;
         public static final int save=0x7f05000b;
-        public static final int select_type_of_profile=0x7f05000d;
-        public static final int selectmaincategory=0x7f050012;
-        public static final int selectsubcategory=0x7f050013;
-        public static final int service_Provide=0x7f050010;
+        public static final int select_type_of_profile=0x7f05000e;
+        public static final int selectmaincategory=0x7f050013;
+        public static final int selectsubcategory=0x7f050014;
+        public static final int service_Provide=0x7f050011;
         public static final int service_area=0x7f05000a;
         public static final int service_sub_type=0x7f050009;
         public static final int service_type=0x7f050008;
         public static final int title_activity_edit_profile=0x7f050003;
-        public static final int title_activity_service_type_selector=0x7f050011;
+        public static final int title_activity_service_type_selector=0x7f050012;
     }
     public static final class style {
         /** 

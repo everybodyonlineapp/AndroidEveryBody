@@ -23,17 +23,17 @@
         android:paddingTop="@dimen/activity_vertical_margin" >
 
         <RadioButton
-            android:id="@+id/Consumer"
+            android:id="@+id/NewUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/consumer" />
+            android:text="@string/newuser" />
 
         <RadioButton
-            android:id="@+id/Service_Provider"
+            android:id="@+id/ExistingUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/service_Provide" />
+            android:text="@string/Existinguser" />
     </RadioGroup>
     
     <Button 

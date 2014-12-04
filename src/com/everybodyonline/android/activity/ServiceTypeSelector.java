@@ -35,13 +35,12 @@ public class ServiceTypeSelector extends Activity {
 	Context context;
 	ArrayList<ServiceMainCategory> mainCategoryList;
 	ArrayList<ServiceSubCategory> subCategoryList;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_service_type_selector);
-		context=this;
+		context = this;
 		mainCategorySpinner = (Spinner) findViewById(R.id.SelectMainCategory);
 		subCategorySpinner = (Spinner) findViewById(R.id.SelectSubCategory);
 		intializeMainCategory();
@@ -49,44 +48,47 @@ public class ServiceTypeSelector extends Activity {
 
 	private void intializeMainCategory() {
 		// TODO Auto-generated method stub
-		ServiceMainCategoryDBHelper serviceMainCategoryDBHelper = new ServiceMainCategoryDBHelper(context);
-	 mainCategoryList=serviceMainCategoryDBHelper.getCategories();
-	
-	ArrayAdapter<ServiceMainCategory> dataAdapter = new ArrayAdapter<ServiceMainCategory>(this,
-			android.R.layout.simple_spinner_item, mainCategoryList);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ServiceMainCategoryDBHelper serviceMainCategoryDBHelper = new ServiceMainCategoryDBHelper(
+				context);
+		mainCategoryList = serviceMainCategoryDBHelper.getCategories();
+
+		ArrayAdapter<ServiceMainCategory> dataAdapter = new ArrayAdapter<ServiceMainCategory>(
+				this, android.R.layout.simple_spinner_item, mainCategoryList);
+		dataAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mainCategorySpinner.setAdapter(dataAdapter);
-	mainCategorySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		mainCategorySpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-		@Override
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
-			// TODO Auto-generated method stub
-			Toast.makeText(context, "Waw", Toast.LENGTH_SHORT).show();
-			String categoryId= mainCategoryList.get(arg2).getCategoryId();
-			intializeSubCategory(categoryId);
-		}
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						// TODO Auto-generated method stub
+						Toast.makeText(context, "Waw", Toast.LENGTH_SHORT)
+								.show();
+						String categoryId = mainCategoryList.get(arg2)
+								.getCategoryId();
+						intializeSubCategory(categoryId);
+					}
 
-		
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
 
-		@Override
-		public void onNothingSelected(AdapterView<?> arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-	});
+					}
+				});
 	}
 
-	
-	private void intializeSubCategory(String  categoryId) {
+	private void intializeSubCategory(String categoryId) {
 		// TODO Auto-generated method stub
 		final ProgressDialog pd = new ProgressDialog(context);
 		pd.setCancelable(false);
 		pd.show();
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("ServiceSubCategory");
+		ParseQuery<ParseObject> query = ParseQuery
+				.getQuery("ServiceSubCategory");
 
 		query.whereEqualTo("ServiceCategoryId", categoryId);
-		
+
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (pd != null && pd.isShowing())
@@ -102,12 +104,12 @@ public class ServiceTypeSelector extends Activity {
 						while (listItem.hasNext()) {
 							parseObject = listItem.next();
 
-							subCategoryList.add(ServiceSubCategory.getServiceSubCategory(parseObject));
-							
+							subCategoryList.add(ServiceSubCategory
+									.getServiceSubCategory(parseObject));
 
 						}
 					}
-					
+
 					setSubCategorySpinner();
 
 				} else {
@@ -116,19 +118,18 @@ public class ServiceTypeSelector extends Activity {
 
 			}
 
-			
-
 		});
 	}
-	
-	
+
 	private void setSubCategorySpinner() {
 		// TODO Auto-generated method stub
-		ArrayAdapter<ServiceSubCategory> dataAdapter = new ArrayAdapter<ServiceSubCategory>(this,
-				android.R.layout.simple_spinner_item, subCategoryList);
-			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			subCategorySpinner.setAdapter(dataAdapter);
+		ArrayAdapter<ServiceSubCategory> dataAdapter = new ArrayAdapter<ServiceSubCategory>(
+				this, android.R.layout.simple_spinner_item, subCategoryList);
+		dataAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		subCategorySpinner.setAdapter(dataAdapter);
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

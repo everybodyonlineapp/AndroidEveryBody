@@ -43,17 +43,18 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 public class EditProfile extends Activity implements OnItemSelectedListener,
 		OnItemClickListener, OnClickListener {
 
-	EditText etName, etShopName, etPhone, etAdress, etServicetype,
-			etServicearea;
+	EditText etName, etPhone, etAdress;
 	AutoCompleteTextView etCity, etArea;
 
-	RadioGroup radioGroup;
-	RadioButton Consumer, Provider;
+	/*
+	 * RadioGroup radioGroup; RadioButton Consumer, Provider;
+	 */
 	ArrayList<City> citylist;
 	ArrayList<Area> arealist;
 	Context context;
-	static String areaId, ProfileType, cityId;
-	Button save, cancel;
+	static String areaId, cityId;
+	Button save, cancel, edit;
+	boolean isEditProfile;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,39 +62,25 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 		setContentView(R.layout.activity_edit_profile);
 		context = this;
 		etName = (EditText) findViewById(R.id.Name);
-		etShopName = (EditText) findViewById(R.id.ShopName);
+		// etShopName = (EditText) findViewById(R.id.ShopName);
 		etPhone = (EditText) findViewById(R.id.PhoneNumber);
 		etCity = (AutoCompleteTextView) findViewById(R.id.City);
 		etArea = (AutoCompleteTextView) findViewById(R.id.Area);
 		etAdress = (EditText) findViewById(R.id.Adress);
-		etServicetype = (EditText) findViewById(R.id.ServiceType);
-		etServicearea = (EditText) findViewById(R.id.ServiceArea);
-		radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
+		// etServicetype = (EditText) findViewById(R.id.ServiceType);
+		// etServicearea = (EditText) findViewById(R.id.ServiceArea);
+		// radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
 		save = (Button) findViewById(R.id.btnSave);
 		cancel = (Button) findViewById(R.id.btnCancel);
-		etServicetype.setOnClickListener(this);
-
+		edit = (Button) findViewById(R.id.btnEdit);
+		// etServicetype.setOnClickListener(this);
+		isEditProfile = getIntent().getBooleanExtra(
+				Constants.CreateProfileType, false);
+		init();
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
-		if (radioGroup.getCheckedRadioButtonId() == R.id.Consumer) {
-			toogleFields(true);
+		edit.setOnClickListener(this);
 
-		} else {
-
-			toogleFields(false);
-		}
-		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				if (checkedId == R.id.Consumer) {
-					toogleFields(true);
-				} else {
-					toogleFields(false);
-				}
-			}
-		});
 		CityDBHelper cityDBHelper = new CityDBHelper(this);
 		citylist = cityDBHelper.getCities();
 
@@ -110,39 +97,34 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 
 	}
 
+	private void init() {
+		// TODO Auto-generated method stub
+		if (isEditProfile) {
+			edit.setVisibility(View.GONE);
+			save.setVisibility(View.VISIBLE);
+			cancel.setVisibility(View.VISIBLE);
+			etName.setEnabled(true);
+			etPhone.setEnabled(true);
+			etCity.setEnabled(true);
+			etArea.setEnabled(true);
+			etAdress.setEnabled(true);
+		} else {
+			edit.setVisibility(View.VISIBLE);
+			save.setVisibility(View.GONE);
+			cancel.setVisibility(View.GONE);
+			etName.setEnabled(false);
+			etPhone.setEnabled(false);
+			etCity.setEnabled(false);
+			etArea.setEnabled(false);
+			etAdress.setEnabled(false);
+		}
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_profile, menu);
 		return true;
-	}
-
-	void toogleFields(boolean isConsumer) {
-		if (isConsumer) {
-			ProfileType = Constants.ConsumerType;
-			etName.setVisibility(View.VISIBLE);
-			etShopName.setVisibility(View.GONE);
-			etPhone.setVisibility(View.VISIBLE);
-			etCity.setVisibility(View.VISIBLE);
-			etArea.setVisibility(View.VISIBLE);
-			etAdress.setVisibility(View.VISIBLE);
-			etServicetype.setVisibility(View.GONE);
-			etServicearea.setVisibility(View.GONE);
-		}
-
-		else {
-			ProfileType = Constants.ProviderType;
-			etName.setVisibility(View.VISIBLE);
-			etShopName.setVisibility(View.VISIBLE);
-			etPhone.setVisibility(View.VISIBLE);
-			etCity.setVisibility(View.VISIBLE);
-			etArea.setVisibility(View.VISIBLE);
-			etAdress.setVisibility(View.VISIBLE);
-			etServicetype.setVisibility(View.VISIBLE);
-			etServicearea.setVisibility(View.VISIBLE);
-
-		}
-
 	}
 
 	private void addareas() {
@@ -229,36 +211,23 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 		case R.id.btnCancel:
 			finish();
 			break;
-		case R.id.btnSave:
-			if (ProfileType.equalsIgnoreCase(Constants.ConsumerType)) {
-				if (etName.getText().toString().length() < 1) {
-					showToast("Name Can not be Empty");
-				} else if (etPhone.getText().toString().length() < 10) {
-					showToast("Please Enter Valid Phone Number");
-				} else if (etCity.getText().toString().length() < 1) {
-					showToast("City Can not be Empty");
-				} else if (etAdress.getText().toString().length() < 1) {
-					showToast("Address Can not be Empty");
-				}
-			} else {
-				if (etName.getText().toString().length() < 1) {
-					showToast("Name Can not be Empty");
-				} else if (etPhone.getText().toString().length() < 10) {
-					showToast("Please Enter Valid Phone Number");
-				} else if (etCity.getText().toString().length() < 1) {
-					showToast("City Can not be Empty");
-				} else if (etAdress.getText().toString().length() < 1) {
-					showToast("Address Can not be Empty");
-				} else if (etServicetype.getText().toString().length() < 1) {
-					showToast("Service Type Can not be Empty");
-				} else if (etServicearea.getText().toString().length() < 1) {
-					showToast("Service Areas Can not be Empty");
-				}
+		case R.id.btnSave: {
+			if (etName.getText().toString().length() < 1) {
+				showToast("Name Can not be Empty");
+			} else if (etPhone.getText().toString().length() < 10) {
+				showToast("Please Enter Valid Phone Number");
+			} else if (etCity.getText().toString().length() < 1) {
+				showToast("City Can not be Empty");
+			} else if (etAdress.getText().toString().length() < 1) {
+				showToast("Address Can not be Empty");
 			}
+
+		}
 			checkProfile();
 			break;
-		case R.id.ServiceType:
-			startActivity(new Intent(context,ServiceTypeSelector.class));
+		case R.id.btnEdit:
+			isEditProfile = true;
+			init();
 		default:
 			break;
 		}
@@ -290,13 +259,11 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 
 						while (listItem.hasNext()) {
 							cityObject = listItem.next();
-							String type = cityObject.getString("ProfileType");
-							if (type.equalsIgnoreCase(ProfileType)) {
+
+							{
 								Toast.makeText(context,
 										"Profile Already Exist",
 										Toast.LENGTH_SHORT).show();
-							} else {
-								saveProfile();
 							}
 
 						}
@@ -323,8 +290,7 @@ public class EditProfile extends Activity implements OnItemSelectedListener,
 
 		parseobject.put("Name", etName.getText().toString());
 		parseobject.put("Phone", etPhone.getText().toString());
-		parseobject.put("ProfileType", ProfileType);
-		parseobject.put("ShopName", etShopName.getText().toString());
+
 		parseobject.put("City", cityId);
 		parseobject.put("Area", areaId);
 		parseobject.put("Adress", etAdress.getText().toString());

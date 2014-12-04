@@ -28,7 +28,7 @@ public class SelectTypeOfProfile extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_select_type_of_profile);
-		context=this;
+		context = this;
 		addListenerOnButton();
 
 	}
@@ -44,7 +44,6 @@ public class SelectTypeOfProfile extends Activity {
 
 		radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
 		btnNext = (Button) findViewById(R.id.btnNext);
-	
 
 		btnNext.setOnClickListener(new OnClickListener() {
 
@@ -53,14 +52,17 @@ public class SelectTypeOfProfile extends Activity {
 
 				// get selected radio button from radioGroup
 				int selectedId = radioGroup.getCheckedRadioButtonId();
-
+				boolean isEditmode = false;
+				if (R.id.NewUser == selectedId) {
+					isEditmode = true;
+				}
+				
 				// find the radiobutton by returned id
-				Intent CreateProfileIntent = new Intent(context,EditProfile.class);
-				CreateProfileIntent.putExtra(Constants.CreateProfileType, selectedId);
+				Intent CreateProfileIntent = new Intent(context,
+						EditProfile.class);
+				CreateProfileIntent.putExtra(Constants.CreateProfileType,
+						isEditmode);
 				context.startActivity(CreateProfileIntent);
-				
-
-				
 
 			}
 
